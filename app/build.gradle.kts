@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,12 +9,12 @@ plugins {
 
 android {
     namespace = "app.cleanupwalk"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "app.cleanupwalk"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
     }
@@ -29,17 +31,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
     buildFeatures {
         compose = true
     }
+}
 
-    androidResources {
-        // Detection models are read into memory, keep them uncompressed for fast loading
-        noCompress += "tflite"
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
@@ -58,7 +57,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.litert)
+    // Gemma 3n runs on-device through LiteRT-LM
+    implementation(libs.litertlm)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(libs.junit)

@@ -74,7 +74,7 @@ fun HomeScreen(
     val context = LocalContext.current
     val formatters = remember { Formatters(context) }
     val state by viewModel.state.collectAsState()
-    val isBusy by viewModel.isBusy.collectAsState()
+    val busy by viewModel.busy.collectAsState()
     val event by viewModel.events.collectAsState()
 
     var showDurations by remember { mutableStateOf(false) }
@@ -211,6 +211,13 @@ fun HomeScreen(
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(top = 4.dp)
                     )
+                    if (!state.hasModel) {
+                        Text(
+                            stringResource(R.string.model_help),
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
+                    }
                 }
 
                 item {
@@ -250,14 +257,14 @@ fun HomeScreen(
         }
     }
 
-    if (isBusy) {
+    busy?.let { message ->
         AlertDialog(
             onDismissRequest = {},
             confirmButton = {},
             text = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     CircularProgressIndicator(Modifier.size(24.dp))
-                    Text(stringResource(R.string.getting_location), Modifier.padding(start = 16.dp))
+                    Text(stringResource(message), Modifier.padding(start = 16.dp))
                 }
             }
         )

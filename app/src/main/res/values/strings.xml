@@ -30,7 +30,7 @@
     <string name="exploration_stop">Explore this area</string>
 
     <!-- Scan -->
-    <string name="analyzing_photo">Looking for litter and damage…</string>
+    <string name="analyzing_photo">Gemma is looking at your photo… The first scan loads the model, so it takes a little longer.</string>
     <string name="detected">Detected %1$s (%2$d%% sure)</string>
     <string name="what_did_you_find">What did you find?</string>
     <string name="how_many">How many?</string>
@@ -43,12 +43,14 @@
     <string name="ok">OK</string>
 
     <!-- Model -->
-    <string name="import_model">Import detection model</string>
-    <string name="remove_model">Remove detection model</string>
-    <string name="model_imported">Detection model imported</string>
-    <string name="model_invalid">That file isn\'t a supported detection model</string>
-    <string name="model_on">AI detection is on. Photos are analyzed on this phone and then deleted.</string>
-    <string name="model_off">No detection model installed - you\'ll pick what you found after each photo.</string>
+    <string name="import_model">Import Gemma model</string>
+    <string name="remove_model">Remove Gemma model</string>
+    <string name="model_imported">Gemma model imported - AI detection is on</string>
+    <string name="model_invalid">That file isn\'t a Gemma .litertlm model</string>
+    <string name="model_on">AI detection is on: Gemma 3n runs on this phone, offline. Photos are deleted after each scan.</string>
+    <string name="model_off">AI detection is off - you\'ll pick what you found after each photo.</string>
+    <string name="model_help">To turn it on, download gemma-3n-E2B-it-int4.litertlm from huggingface.co/google/gemma-3n-E2B-it-litert-lm, then tap ⋮ → Import Gemma model.</string>
+    <string name="importing_model">Importing the Gemma model (a few GB, this can take a minute)…</string>
 
     <!-- Walk -->
     <string name="time_left">Time left</string>

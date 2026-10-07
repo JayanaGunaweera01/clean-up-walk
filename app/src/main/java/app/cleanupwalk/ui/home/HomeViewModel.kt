@@ -4,11 +4,13 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cleanupwalk.CleanupWalkApp
+import app.cleanupwalk.R
 import app.cleanupwalk.domain.CleanupIssue
 import app.cleanupwalk.domain.CleanupWalkSession
 import app.cleanupwalk.domain.CleanupWalkTotals
 import app.cleanupwalk.domain.GeoPoint
 import app.cleanupwalk.ui.scan.Finding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Duration
 
 data class HomeUiState(
@@ -37,8 +40,9 @@ class HomeViewModel(private val app: CleanupWalkApp) : ViewModel() {
 
     private val modelState = MutableStateFlow(false to false)
 
-    private val _isBusy = MutableStateFlow(false)
-    val isBusy: StateFlow<Boolean> = _isBusy.asStateFlow()
+    /** A message for the busy dialog (a string resource), or null when idle */
+    private val _busy = MutableStateFlow<Int?>(null)
+    val busy: StateFlow<Int?> = _busy.asStateFlow()
 
     private val _events = MutableStateFlow<HomeEvent?>(null)
     val events: StateFlow<HomeEvent?> = _events.asStateFlow()
@@ -67,9 +71,9 @@ class HomeViewModel(private val app: CleanupWalkApp) : ViewModel() {
 
     fun startWalk(minutes: Long) {
         viewModelScope.launch {
-            _isBusy.value = true
+            _busy.value = R.string.getting_location
             val fix = app.locationTracker.current()
-            _isBusy.value = false
+            _busy.value = null
             if (fix == null || fix.location.isZero) {
                 _events.value = HomeEvent.NoLocation
                 return@launch
@@ -81,9 +85,9 @@ class HomeViewModel(private val app: CleanupWalkApp) : ViewModel() {
 
     fun saveFinding(finding: Finding) {
         viewModelScope.launch {
-            _isBusy.value = true
+            _busy.value = R.string.getting_location
             val fix = app.locationTracker.current()
-            _isBusy.value = false
+            _busy.value = null
             val location: GeoPoint = fix?.location?.takeIf { !it.isZero } ?: run {
                 _events.value = HomeEvent.NoLocation
                 return@launch
@@ -103,7 +107,10 @@ class HomeViewModel(private val app: CleanupWalkApp) : ViewModel() {
 
     fun importModel(uri: Uri) {
         viewModelScope.launch {
+            _busy.value = R.string.importing_model
+            app.gemma.close()
             val success = app.models.import(uri)
+            _busy.value = null
             refreshModel()
             _events.value = HomeEvent.ModelImported(success)
         }
@@ -111,14 +118,17 @@ class HomeViewModel(private val app: CleanupWalkApp) : ViewModel() {
 
     fun removeModel() {
         viewModelScope.launch {
+            app.gemma.close()
             app.models.removeImported()
             refreshModel()
         }
     }
 
-    private fun refreshModel() {
+    fun refreshModel() {
         viewModelScope.launch {
-            modelState.value = app.models.hasModel() to app.models.hasImportedModel
+            modelState.value = withContext(Dispatchers.IO) {
+                app.models.hasModel to app.models.hasImportedModel
+            }
         }
     }
 }

@@ -50,35 +50,7 @@ internal class CleanupWalkDomainTest {
         assertEquals(10.0, tracker.distanceMeters, 0.5)
     }
 
-    @Test
-    fun scanInterpreterFiltersAndDeduplicates() {
-        val interpreter = CleanupScanInterpreter()
-        val result = interpreter.interpret(
-            listOf(
-                CleanupDetection(CleanupIssueType.Litter, 0.9f, listOf(0.1f, 0.1f, 0.3f, 0.3f)),
-                // Same bottle detected twice
-                CleanupDetection(CleanupIssueType.Litter, 0.8f, listOf(0.11f, 0.1f, 0.31f, 0.3f)),
-                CleanupDetection(CleanupIssueType.Litter, 0.7f, listOf(0.6f, 0.6f, 0.8f, 0.8f)),
-                // Too unsure
-                CleanupDetection(CleanupIssueType.FallenBranch, 0.2f, listOf(0f, 0f, 1f, 1f))
-            )
-        )
-        assertEquals(mapOf(CleanupIssueType.Litter to 2), result.counts)
-        assertEquals(CleanupIssueType.Litter, result.primaryType)
-        assertEquals(0.9f, result.confidence!!, 0.0001f)
-    }
 
-    @Test
-    fun scanInterpreterPrefersImportantIssues() {
-        val result = CleanupScanInterpreter().interpret(
-            listOf(
-                CleanupDetection(CleanupIssueType.Litter, 0.8f),
-                CleanupDetection(CleanupIssueType.DamagedInfrastructure, 0.75f)
-            )
-        )
-        assertEquals(CleanupIssueType.DamagedInfrastructure, result.primaryType)
-        assertTrue(CleanupScanInterpreter().interpret(emptyList()).isEmpty)
-    }
 
     @Test
     fun progressPassesExplorationStopsAndStopsAtIssues() {

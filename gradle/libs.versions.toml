@@ -1,15 +1,15 @@
 [versions]
-agp = "8.7.3"
-kotlin = "2.1.0"
-ksp = "2.1.0-1.0.29"
+agp = "8.13.0"
+kotlin = "2.3.20"
+ksp = "2.3.9"
 coreKtx = "1.15.0"
 activityCompose = "1.9.3"
 composeBom = "2024.12.01"
 lifecycle = "2.8.7"
 navigationCompose = "2.8.5"
-room = "2.6.1"
-coroutines = "1.9.0"
-litert = "1.0.1"
+room = "2.8.5"
+coroutines = "1.10.2"
+litertlm = "0.18.0"
 junit = "4.13.2"
 
 [libraries]
@@ -28,7 +28,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
-litert = { module = "com.google.ai.edge.litert:litert", version.ref = "litert" }
+litertlm = { module = "com.google.ai.edge.litertlm:litertlm-android", version.ref = "litertlm" }
 junit = { module = "junit:junit", version.ref = "junit" }
 
 [plugins]

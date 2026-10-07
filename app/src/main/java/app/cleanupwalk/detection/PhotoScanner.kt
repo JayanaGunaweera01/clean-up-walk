@@ -7,20 +7,19 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import androidx.core.content.FileProvider
-import app.cleanupwalk.domain.CleanupScanInterpreter
 import app.cleanupwalk.domain.CleanupScanResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 /**
- * Prepares a temporary file for the camera app and analyzes the photo it captures.
+ * Prepares a temporary file for the camera app and has Gemma analyze the photo it captures.
  * Photos are deleted as soon as they are analyzed.
  */
-class PhotoScanner(context: Context, private val models: DetectionModelStore) {
+class PhotoScanner(context: Context, private val gemma: GemmaIssueScanner) {
 
     private val appContext = context.applicationContext
-    private val interpreter = CleanupScanInterpreter()
 
     data class Capture(val file: File, val uri: Uri)
 
@@ -33,15 +32,16 @@ class PhotoScanner(context: Context, private val models: DetectionModelStore) {
 
     suspend fun analyze(capture: Capture): CleanupScanResult = withContext(Dispatchers.Default) {
         try {
-            val detector = models.createDetector() ?: return@withContext CleanupScanResult.empty
-            detector.use {
-                val image = loadImage(capture.file) ?: return@withContext CleanupScanResult.empty
-                try {
-                    interpreter.interpret(it.detect(image))
-                } finally {
-                    image.recycle()
+            val image = loadImage(capture.file) ?: return@withContext CleanupScanResult.empty
+            val jpeg = try {
+                ByteArrayOutputStream().use { out ->
+                    image.compress(Bitmap.CompressFormat.JPEG, JPEG_QUALITY, out)
+                    out.toByteArray()
                 }
+            } finally {
+                image.recycle()
             }
+            gemma.scan(jpeg)
         } catch (e: Exception) {
             CleanupScanResult.empty
         } finally {
@@ -58,7 +58,7 @@ class PhotoScanner(context: Context, private val models: DetectionModelStore) {
             return null
         }
 
-        // Decode at roughly the model's resolution to save memory
+        // Decode near Gemma's vision input size to save memory and time
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeFile(file.path, bounds)
         var sampleSize = 1
@@ -90,6 +90,7 @@ class PhotoScanner(context: Context, private val models: DetectionModelStore) {
     }
 
     companion object {
-        private const val MAX_SIZE = 640
+        private const val MAX_SIZE = 768
+        private const val JPEG_QUALITY = 90
     }
 }
