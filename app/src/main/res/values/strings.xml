@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cleanup Walk</string>
+    <string name="tagline">Turn a walk into a neighborhood cleanup.</string>
+
+    <!-- Home -->
+    <string name="start_walk">Start cleanup walk</string>
+    <string name="resume_walk">Resume cleanup walk</string>
+    <string name="choose_duration">How long do you want to clean?</string>
+    <string name="duration_minutes">%d-minute cleanup</string>
+    <string name="scan_issue">Scan / report issue</string>
+    <string name="open_issues">Open issues</string>
+    <string name="no_open_issues">No open issues yet. Scan litter, overflowing bins, damaged infrastructure, or fallen branches to add them.</string>
+    <string name="totals">%1$d walks · %2$s · %3$d pieces of litter removed</string>
+    <string name="totals_one">1 walk · %1$s · %2$d pieces of litter removed</string>
+    <string name="no_walks_yet">Pick a time, follow the loop, and pick up what you find.</string>
+    <string name="mark_resolved">Mark resolved</string>
+    <string name="delete">Delete</string>
+    <string name="more_options">More options</string>
+    <string name="getting_location">Getting your location…</string>
+    <string name="no_location">Couldn\'t get your location. Make sure location is on and try again outside.</string>
+    <string name="location_permission_needed">Location permission is needed to plan your walk.</string>
+
+    <!-- Issue types -->
+    <string name="issue_litter">Litter</string>
+    <string name="issue_overflowing_bin">Overflowing bin</string>
+    <string name="issue_damaged_infrastructure">Damaged infrastructure</string>
+    <string name="issue_fallen_branch">Fallen branch</string>
+    <string name="issue_count">%1$s ×%2$d</string>
+    <string name="exploration_stop">Explore this area</string>
+
+    <!-- Scan -->
+    <string name="analyzing_photo">Looking for litter and damage…</string>
+    <string name="detected">Detected %1$s (%2$d%% sure)</string>
+    <string name="what_did_you_find">What did you find?</string>
+    <string name="how_many">How many?</string>
+    <string name="did_you_clean_it">Did you clean it up?</string>
+    <string name="cleaned_it">Cleaned it up</string>
+    <string name="report_only">Report only</string>
+    <string name="issue_saved">Saved</string>
+    <string name="no_camera_app">No camera app found.</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+
+    <!-- Model -->
+    <string name="import_model">Import detection model</string>
+    <string name="remove_model">Remove detection model</string>
+    <string name="model_imported">Detection model imported</string>
+    <string name="model_invalid">That file isn\'t a supported detection model</string>
+    <string name="model_on">AI detection is on. Photos are analyzed on this phone and then deleted.</string>
+    <string name="model_off">No detection model installed - you\'ll pick what you found after each photo.</string>
+
+    <!-- Walk -->
+    <string name="time_left">Time left</string>
+    <string name="walked">Walked</string>
+    <string name="litter_removed">Litter removed</string>
+    <string name="next_stop">Next stop</string>
+    <string name="distance_direction">%1$s %2$s</string>
+    <string name="head_back">Head back to the start</string>
+    <string name="arrived">You\'re here - look around</string>
+    <string name="waiting_for_gps">Waiting for GPS…</string>
+    <string name="route_summary">%1$d problem spots on a %2$s loop</string>
+    <string name="route_summary_exploring">No known problems nearby - exploring a %s loop. Scan anything you find.</string>
+    <string name="done_here">Done here</string>
+    <string name="skip">Skip</string>
+    <string name="plus_one_litter">+1 litter</string>
+    <string name="finish_walk">Finish walk</string>
+    <string name="finish_walk_question">Finish this cleanup walk?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="walk_complete">Cleanup complete</string>
+    <string name="walk_result">You cleaned %1$s of your neighborhood and removed %2$s.</string>
+    <string name="walk_result_reported">You also reported %d issues.</string>
+    <string name="safety_note">Stay on safe, legal paths. Use gloves and leave sharp or hazardous items for the authorities.</string>
+
+    <!-- Directions -->
+    <string name="dir_n">N</string>
+    <string name="dir_ne">NE</string>
+    <string name="dir_e">E</string>
+    <string name="dir_se">SE</string>
+    <string name="dir_s">S</string>
+    <string name="dir_sw">SW</string>
+    <string name="dir_w">W</string>
+    <string name="dir_nw">NW</string>
+
+    <plurals name="litter_pieces">
+        <item quantity="one">%d piece of litter</item>
+        <item quantity="other">%d pieces of litter</item>
+    </plurals>
+</resources>

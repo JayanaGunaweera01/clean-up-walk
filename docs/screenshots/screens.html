@@ -1,0 +1,286 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --primary: #2E7D32;
+    --on-primary: #fff;
+    --primary-container: #B9EFB2;
+    --surface: #F7FBF2;
+    --surface-card: #E3EADD;
+    --surface-dialog: #EDF2E8;
+    --on-surface: #191D17;
+    --on-surface-var: #42493F;
+    --outline: #72796F;
+    --scrim: rgba(0,0,0,.32);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Inter", sans-serif; background: #d9ddd5; padding: 24px; display: flex; flex-wrap: wrap; gap: 32px; }
+  .shot { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .caption { font: 600 15px Inter; color: #22301f; max-width: 360px; text-align: center; }
+  .phone {
+    width: 360px; height: 760px; border-radius: 36px; background: #111; padding: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  }
+  .screen {
+    position: relative; width: 100%; height: 100%; border-radius: 28px; overflow: hidden;
+    background: var(--surface); color: var(--on-surface); display: flex; flex-direction: column;
+  }
+  .status { height: 28px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; font: 600 12px Inter; }
+  .appbar { height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 16px; font: 400 22px Inter; }
+  .icon-btn { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 20px; }
+  svg.i { width: 24px; height: 24px; fill: currentColor; }
+  .content { flex: 1; padding: 0 16px 16px; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+  .card { background: var(--surface-card); border-radius: 12px; padding: 16px; }
+  .title-m { font: 500 16px Inter; letter-spacing: .1px; }
+  .title-l { font: 700 22px Inter; }
+  .headline-s { font: 400 24px Inter; line-height: 32px; }
+  .body-l { font: 400 16px Inter; line-height: 24px; }
+  .body-m { font: 400 14px Inter; line-height: 20px; }
+  .body-s { font: 400 12px Inter; line-height: 16px; color: var(--on-surface-var); }
+  .label-l { font: 500 14px Inter; color: var(--on-surface-var); }
+  .btn { height: 40px; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; font: 500 14px Inter; letter-spacing: .1px; }
+  .btn.filled { background: var(--primary); color: var(--on-primary); }
+  .btn.outlined { border: 1px solid var(--outline); color: var(--primary); }
+  .btn.outlined.disabled { color: rgba(25,29,23,.38); border-color: rgba(25,29,23,.12); }
+  .btn.text { color: var(--primary); padding: 0 12px; }
+  .btn.big { height: 56px; }
+  .btn.huge { height: 96px; border-radius: 48px; font: 400 24px Inter; }
+  .row { display: flex; gap: 8px; }
+  .row > * { flex: 1; }
+  .stat { text-align: center; }
+  .issue { background: var(--surface-card); border-radius: 12px; display: flex; align-items: center; padding: 12px 8px 12px 16px; }
+  .issue .t { flex: 1; }
+  .scrim { position: absolute; inset: 0; background: var(--scrim); display: grid; place-items: center; padding: 24px; }
+  .dialog { background: var(--surface-dialog); border-radius: 28px; padding: 24px; width: 100%; box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+  .dialog h2 { font: 400 22px Inter; line-height: 28px; margin-bottom: 16px; }
+  .choice { height: 40px; display: flex; align-items: center; padding: 0 12px; color: var(--primary); font: 500 14px Inter; border-radius: 20px; }
+  .choice.first { background: rgba(46,125,50,.12); }
+  .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+  .spinner { width: 24px; height: 24px; border: 3px solid var(--primary-container); border-top-color: var(--primary); border-radius: 50%; }
+  .menu { position: absolute; top: 76px; right: 12px; background: var(--surface-dialog); border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,.2); padding: 8px 0; min-width: 220px; }
+  .menu div { padding: 12px 16px; font: 400 14px Inter; }
+  .navbar { height: 20px; display: grid; place-items: center; }
+  .navbar span { width: 108px; height: 4px; background: #444; border-radius: 2px; }
+  .camera { flex: 1; background: linear-gradient(180deg,#8fa7b8 0%,#b8c4a8 45%,#7c8b67 46%,#5e6d4b 100%); position: relative; }
+  .camera .bottle { position: absolute; width: 34px; height: 70px; background: #6fb6d9; border-radius: 10px 10px 6px 6px; transform: rotate(-60deg); }
+  .camera .can { position: absolute; width: 30px; height: 46px; background: #c0392b; border-radius: 6px; transform: rotate(20deg); }
+  .camera .wrap { position: absolute; width: 50px; height: 30px; background: #f1c40f; border-radius: 4px; transform: rotate(10deg); }
+  .camera .box { position: absolute; border: 2px solid #7CFC00; border-radius: 4px; }
+  .camera .box span { position: absolute; top: -20px; left: -2px; background: #7CFC00; color: #111; font: 600 11px Inter; padding: 2px 6px; border-radius: 3px; white-space: nowrap; }
+  .shutter { height: 120px; background: #000; display: flex; align-items: center; justify-content: center; }
+  .shutter div { width: 68px; height: 68px; border-radius: 50%; border: 4px solid #fff; background: #ddd; }
+  .note { font: 400 12px Inter; color: #42493F; }
+</style>
+</head>
+<body>
+
+<!-- Reusable icon paths (Material icons) -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="more" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></symbol>
+  <symbol id="cam" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2 7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></symbol>
+  <symbol id="walk" viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9 7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></symbol>
+  <symbol id="nav" viewBox="0 0 24 24"><path d="M12 2 4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></symbol>
+</svg>
+
+<!-- 1. Home, first launch -->
+<div class="shot" id="s1">
+  <div class="phone"><div class="screen">
+    <div class="status"><span>9:41</span><span>▾ ▴ 100%</span></div>
+    <div class="appbar">Cleanup Walk <div class="icon-btn"><svg class="i"><use href="#more"/></svg></div></div>
+    <div class="content">
+      <div class="card">
+        <div class="title-m">Turn a walk into a neighborhood cleanup.</div>
+        <div class="body-l" style="margin-top:8px">Pick a time, follow the loop, and pick up what you find.</div>
+      </div>
+      <div class="btn filled big"><svg class="i"><use href="#walk"/></svg>Start cleanup walk</div>
+      <div>
+        <div class="btn outlined"><svg class="i"><use href="#cam"/></svg>Scan / report issue</div>
+        <div class="body-s" style="margin-top:4px">No detection model installed - you'll pick what you found after each photo.</div>
+      </div>
+      <div class="title-m" style="margin-top:8px">Open issues</div>
+      <div class="body-m">No open issues yet. Scan litter, overflowing bins, damaged infrastructure, or fallen branches to add them.</div>
+    </div>
+    <div class="navbar"><span></span></div>
+  </div></div>
+  <div class="caption">1 · Home screen (first launch)</div>
+</div>
+
+<!-- 2. Choose duration -->
+<div class="shot" id="s2">
+  <div class="phone"><div class="screen">
+    <div class="status"><span>9:41</span><span>▾ ▴ 100%</span></div>
+    <div class="appbar">Cleanup Walk <div class="icon-btn"><svg class="i"><use href="#more"/></svg></div></div>
+    <div class="content">
+      <div class="card"><div class="title-m">Turn a walk into a neighborhood cleanup.</div><div class="body-l" style="margin-top:8px">Pick a time, follow the loop, and pick up what you find.</div></div>
+      <div class="btn filled big">Start cleanup walk</div>
+    </div>
+    <div class="scrim"><div class="dialog">
+      <h2>How long do you want to clean?</h2>
+      <div class="choice">15-minute cleanup</div>
+      <div class="choice first">30-minute cleanup</div>
+      <div class="choice">45-minute cleanup</div>
+      <div class="choice">60-minute cleanup</div>
+      <div class="actions"><div class="btn text">Cancel</div></div>
+    </div></div>
+  </div></div>
+  <div class="caption">2 · Choose how long to clean → app gets GPS and plans the loop</div>
+</div>
+
+<!-- 3. Walk in progress -->
+<div class="shot" id="s3">
+  <div class="phone"><div class="screen">
+    <div class="status"><span>9:47</span><span>▾ ▴ 97%</span></div>
+    <div class="appbar">Cleanup Walk</div>
+    <div class="content">
+      <div class="row">
+        <div class="stat"><div class="title-l">24:12</div><div class="body-s">Time left</div></div>
+        <div class="stat"><div class="title-l">420 m</div><div class="body-s">Walked</div></div>
+        <div class="stat"><div class="title-l">4</div><div class="body-s">Litter removed</div></div>
+      </div>
+      <div class="card">
+        <div class="label-l">Next stop</div>
+        <div class="headline-s">Overflowing bin</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+          <svg class="i" style="transform:rotate(48deg);color:var(--primary)"><use href="#nav"/></svg>
+          <span class="body-l">180 m NE</span>
+        </div>
+        <div class="body-s" style="margin-top:8px">3 problem spots on a 2.1 km loop</div>
+      </div>
+      <div class="row"><div class="btn outlined">Done here</div><div class="btn outlined">Skip</div></div>
+      <div style="flex:1"></div>
+      <div class="body-s">Stay on safe, legal paths. Use gloves and leave sharp or hazardous items for the authorities.</div>
+      <div class="btn filled huge">+1 litter</div>
+      <div class="btn outlined"><svg class="i"><use href="#cam"/></svg>Scan / report issue</div>
+      <div style="display:flex;justify-content:center"><div class="btn text">Finish walk</div></div>
+    </div>
+    <div class="navbar"><span></span></div>
+  </div></div>
+  <div class="caption">3 · Walk screen: timer, distance, litter count, arrow to next problem spot</div>
+</div>
+
+<!-- 4. Arrived -->
+<div class="shot" id="s4">
+  <div class="phone"><div class="screen">
+    <div class="status"><span>9:50</span><span>▾ ▴ 96%</span></div>
+    <div class="appbar">Cleanup Walk</div>
+    <div class="content">
+      <div class="row">
+        <div class="stat"><div class="title-l">21:03</div><div class="body-s">Time left</div></div>
+        <div class="stat"><div class="title-l">610 m</div><div class="body-s">Walked</div></div>
+        <div class="stat"><div class="title-l">6</div><div class="body-s">Litter removed</div></div>
+      </div>
+      <div class="card" style="outline:2px solid var(--primary)">
+        <div class="label-l">Next stop</div>
+        <div class="headline-s">Litter</div>
+        <div class="body-l" style="margin-top:4px;color:var(--primary);font-weight:600">You're here - look around</div>
+        <div class="body-s" style="margin-top:8px">3 problem spots on a 2.1 km loop</div>
+      </div>
+      <div class="row"><div class="btn outlined">Done here</div><div class="btn outlined">Skip</div></div>
+      <div style="flex:1"></div>
+      <div class="btn filled huge">+1 litter</div>
+      <div class="btn outlined"><svg class="i"><use href="#cam"/></svg>Scan / report issue</div>
+      <div style="display:flex;justify-content:center"><div class="btn text">Finish walk</div></div>
+    </div>
+    <div class="scrim"><div class="dialog">
+      <h2>How many?</h2>
+      <div class="choice first">5</div><div class="choice">1</div><div class="choice">2</div><div class="choice">3</div><div class="choice">10</div><div class="choice">20</div>
+      <div class="actions"><div class="btn text">Cancel</div></div>
+    </div></div>
+  </div></div>
+  <div class="caption">4 · Reached a litter hotspot → "Done here" asks how many you picked up</div>
+</div>
+
+<!-- 5. Camera -->
+<div class="shot" id="s5">
+  <div class="phone"><div class="screen" style="background:#000">
+    <div class="status" style="color:#fff"><span>9:52</span><span>▾ ▴ 95%</span></div>
+    <div class="camera">
+      <div class="bottle" style="left:70px;top:330px"></div>
+      <div class="can" style="left:200px;top:380px"></div>
+      <div class="wrap" style="left:120px;top:470px"></div>
+      <div class="box" style="left:52px;top:318px;width:86px;height:80px"><span>litter 91%</span></div>
+      <div class="box" style="left:186px;top:366px;width:56px;height:70px"><span>litter 87%</span></div>
+      <div class="box" style="left:108px;top:456px;width:74px;height:56px"><span>litter 74%</span></div>
+    </div>
+    <div class="shutter"><div></div></div>
+  </div></div>
+  <div class="caption">5 · Scan: phone camera photo (boxes show what the on-device AI model finds — not drawn in the app)</div>
+</div>
+
+<!-- 6. Detected -->
+<div class="shot" id="s6">
+  <div class="phone"><div class="screen">
+    <div class="status"><span>9:52</span><span>▾ ▴ 95%</span></div>
+    <div class="appbar">Cleanup Walk</div>
+    <div class="content"><div class="row"><div class="stat"><div class="title-l">19:40</div><div class="body-s">Time left</div></div><div class="stat"><div class="title-l">700 m</div><div class="body-s">Walked</div></div><div class="stat"><div class="title-l">11</div><div class="body-s">Litter removed</div></div></div></div>
+    <div class="scrim"><div class="dialog">
+      <h2>Detected Litter ×3 (91% sure)</h2>
+      <div class="choice first">Litter</div>
+      <div class="choice">Damaged infrastructure</div>
+      <div class="choice">Overflowing bin</div>
+      <div class="choice">Fallen branch</div>
+      <div class="actions"><div class="btn text">Cancel</div></div>
+    </div></div>
+  </div></div>
+  <div class="caption">6 · AI suggestion first — one tap to confirm or correct</div>
+</div>
+
+<!-- 7. Clean or report -->
+<div class="shot" id="s7">
+  <div class="phone"><div class="screen">
+    <div class="status"><span>9:53</span><span>▾ ▴ 95%</span></div>
+    <div class="appbar">Cleanup Walk</div>
+    <div class="content"><div class="row"><div class="stat"><div class="title-l">19:21</div><div class="body-s">Time left</div></div><div class="stat"><div class="title-l">700 m</div><div class="body-s">Walked</div></div><div class="stat"><div class="title-l">11</div><div class="body-s">Litter removed</div></div></div></div>
+    <div class="scrim"><div class="dialog">
+      <h2>Did you clean it up?</h2>
+      <div class="actions"><div class="btn text">Report only</div><div class="btn text">Cleaned it up</div></div>
+    </div></div>
+  </div></div>
+  <div class="caption">7 · Clean it now (counts toward your total) or report it for a future walk</div>
+</div>
+
+<!-- 8. Summary -->
+<div class="shot" id="s8">
+  <div class="phone"><div class="screen">
+    <div class="status"><span>10:11</span><span>▾ ▴ 91%</span></div>
+    <div class="appbar">Cleanup Walk</div>
+    <div class="content"><div class="row"><div class="stat"><div class="title-l">0:00</div><div class="body-s">Time left</div></div><div class="stat"><div class="title-l">1.8 km</div><div class="body-s">Walked</div></div><div class="stat"><div class="title-l">14</div><div class="body-s">Litter removed</div></div></div></div>
+    <div class="scrim"><div class="dialog">
+      <h2>Cleanup complete</h2>
+      <div class="body-l">You cleaned 1.8 km of your neighborhood and removed 14 pieces of litter. You also reported 2 issues.</div>
+      <div class="actions"><div class="btn text">OK</div></div>
+    </div></div>
+  </div></div>
+  <div class="caption">8 · End of walk summary</div>
+</div>
+
+<!-- 9. Home after walks -->
+<div class="shot" id="s9">
+  <div class="phone"><div class="screen">
+    <div class="status"><span>10:12</span><span>▾ ▴ 91%</span></div>
+    <div class="appbar">Cleanup Walk <div class="icon-btn"><svg class="i"><use href="#more"/></svg></div></div>
+    <div class="content">
+      <div class="card">
+        <div class="title-m">Turn a walk into a neighborhood cleanup.</div>
+        <div class="body-l" style="margin-top:8px">3 walks · 4.6 km · 37 pieces of litter removed</div>
+      </div>
+      <div class="btn filled big"><svg class="i"><use href="#walk"/></svg>Start cleanup walk</div>
+      <div>
+        <div class="btn outlined"><svg class="i"><use href="#cam"/></svg>Scan / report issue</div>
+        <div class="body-s" style="margin-top:4px">AI detection is on. Photos are analyzed on this phone and then deleted.</div>
+      </div>
+      <div class="title-m" style="margin-top:8px">Open issues</div>
+      <div class="issue"><div class="t"><div class="body-l">Damaged infrastructure</div><div class="body-s">Oct 7, 2026, 9:58 AM</div></div><div class="icon-btn"><svg class="i"><use href="#more"/></svg></div></div>
+      <div class="issue"><div class="t"><div class="body-l">Overflowing bin</div><div class="body-s">Oct 7, 2026, 9:55 AM</div></div><div class="icon-btn"><svg class="i"><use href="#more"/></svg></div></div>
+      <div class="issue"><div class="t"><div class="body-l">Litter ×8</div><div class="body-s">Oct 6, 2026, 5:20 PM</div></div><div class="icon-btn"><svg class="i"><use href="#more"/></svg></div></div>
+    </div>
+    <div class="menu" style="top:auto;bottom:170px;right:20px"><div>Mark resolved</div><div>Delete</div></div>
+    <div class="navbar"><span></span></div>
+  </div></div>
+  <div class="caption">9 · Home after a few walks: lifetime totals and open issues the next route will visit</div>
+</div>
+
+</body>
+</html>
