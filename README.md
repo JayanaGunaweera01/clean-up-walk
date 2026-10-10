@@ -25,8 +25,6 @@ The app's job isn't to entertain you — it converts screen interaction into phy
 | <img src="docs/screenshots/07-clean-or-report.png" width="250" alt="Did you clean it up? Report only or Cleaned it up"> | <img src="docs/screenshots/08-walk-summary.png" width="250" alt="Cleanup complete summary"> | <img src="docs/screenshots/09-home-with-issues.png" width="250" alt="Home screen with totals and open issues"> |
 | Cleaned items count toward your total; reported ones are routed on future walks. | "You cleaned 1.8 km of your neighborhood and removed 14 pieces of litter." | Lifetime totals, plus open issues you can mark resolved or delete. |
 
-All screens on one page: [docs/screenshots/00-overview.png](docs/screenshots/00-overview.png).
-
 ## What it does
 
 - **Spots problems with the camera.** Take a photo and **Gemma 3n**, Google's open-weight multimodal model running entirely on the phone, finds litter, overflowing bins, damaged public infrastructure, and fallen branches, with a count. Confirm or correct with one tap. Photos never leave the phone and are deleted right after analysis.
